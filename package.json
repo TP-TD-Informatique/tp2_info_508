@@ -1,0 +1,13 @@
+{
+  "name": "gr1_info9",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "Kevin Traini",
+  "depedencies": {
+    "express": ">0",
+    "mongodb": ">0"
+  }
+}
