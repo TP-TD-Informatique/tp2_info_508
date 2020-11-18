@@ -6,7 +6,7 @@
     "start": "node app"
   },
   "author": "Kevin Traini",
-  "depedencies": {
+  "dependencies": {
     "express": ">0",
     "mongodb": ">0"
   }
