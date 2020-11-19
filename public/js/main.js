@@ -9,3 +9,5 @@ const request = function(url, id) {
 	xmlhttp.send();
 };
 request("http://mongo.learninglab.eu/gr1_info9/distance/Chambery", "test");
+request("http://mongo.learninglab.eu/gr1_info9/coll/times", "");
+request("http;//mongo.learninglab.eu/gr1_info9/coll/cities", "");
