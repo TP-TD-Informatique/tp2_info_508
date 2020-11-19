@@ -84,7 +84,7 @@ app.use("/coll/checked", function(req, res) {
 			}
 		},
 		function(key, values) {
-			return values.length;
+			return Array.sum(values);
 		},
 		{out: {inline: 1}},
 		function (err, data) {
@@ -107,7 +107,7 @@ app.use("/coll/name", function(req, res) {
 			emit(name, 1);
 		},
 		function(key, values) {
-			return values.length;
+			return Array.sum(values);
 		},
 		{out: {inline: 1}},
 		function(err, data) {
@@ -127,7 +127,7 @@ app.use("/coll/field", function(req, res) {
 			emit(this["field"], 1);
 		},
 		function(key, values) {
-			return values.length;
+			return Array.sum(values);
 		},
 		{out: {inline: 1}},
 		function(err, data) {
@@ -161,7 +161,7 @@ app.use("/coll/locomotion", function(req, res) {
 			}
 		},
 		function(key, values) {
-			return values.length;
+			return Array.sum(values);
 		},
 		{ out: { inline: 1 } },
 		function (err, data) {
@@ -183,7 +183,7 @@ app.use("/coll/affluence", function(req, res) {
 			}
 		},
 		function(key, values) {
-			return values.length;
+			return Array.sum(values);
 		},
 		{ out: { inline: 1 } },
 		function (err, data) {
@@ -208,7 +208,7 @@ app.use("/coll/covoiturage", function(req, res) {
 			}
 		},
 		function(key, values) {
-			return values.length;
+			return Array.sum(values);
 		},
 		{ out: { inline: 1 } },
 		function (err, data) {
@@ -285,6 +285,28 @@ app.use("/coll/satisf", function(req, res) {
 				console.log("\033[31m>>> " + err + "\033[0m");
 			} else {
 				console.log("\033[32m/coll/satisf\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
+// Fourchette de valeurs distance / nbr d'étudiants
+app.use("/coll/distance", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			if (this["city"]) {
+				emit(this["city"], 1);
+			}
+		},
+		function(key, values) {
+			return Array.sum(values);
+		},
+		{ out: { inline: 1 } },
+		function (err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/distance\033[0m");
 				res.status(200).send(data);
 			}
 		}
