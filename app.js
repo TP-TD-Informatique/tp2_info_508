@@ -1,4 +1,5 @@
 const express = require("express");
+const { emit } = require("process");
 const app = express();
 
 // Lancement de l'application
@@ -72,41 +73,38 @@ app.use("/coll/all", function(req, res) {
 		}
 	);
 });
-// Renvoie le temps moyen en fonction de la ville d'habitation
-app.use("/coll/times", function(req, res) {
+// Coché ou pas ?
+app.use("/coll/checked", function(req, res) {
 	db.collection(coll).mapReduce(
 		function() {
-			var time;
-			if (this["car-time"])
-				time = this["car-time"];
-			if (this["moto-time"])
-				time = this["moto-time"];
-			if (this["bus-time"])
-				time = this["bus-time"];
-			if (this["foot-time"])
-				time = this["foot-time"];
-
-			emit(this["city"], Number(time));
+			if (this["no-test"]) {
+				emit("check", 1);
+			} else {
+				emit("no-check", 1);
+			}
 		},
 		function(key, values) {
-			return Array.sum(values) / values.length;
+			return values.length;
 		},
 		{out: {inline: 1}},
-		function(err, data) {
+		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
 			} else {
-				console.log("\033[32m/coll/times\033[0m");
-				res.status(200).send(data);
+				console.log("\033[32m/coll/checked\033[0m");
+				res.status(200).send(data)
 			}
 		}
 	);
 });
-// Nombre d'étudiants par villes
-app.use("/coll/cities", function(req, res) {
+// Nombre d'étudiant par première lettre du prénom
+app.use("/coll/name", function(req, res) {
 	db.collection(coll).mapReduce(
 		function() {
-			emit(this["city"], 1);
+			var name = this["first-name"]
+			if (name)
+				name = name[0];
+			emit(name, 1);
 		},
 		function(key, values) {
 			return values.length;
@@ -116,10 +114,179 @@ app.use("/coll/cities", function(req, res) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
 			} else {
-				console.log("\033[32m/coll.cities\033[0m");
+				console.log("\033[32m/coll/name\033[0m");
 				res.status(200).send(data);
 			}
 		}
 	);
 });
-
+// Nombre d'étudiants par filière
+app.use("/coll/field", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			emit(this["field"], 1);
+		},
+		function(key, values) {
+			return values.length;
+		},
+		{out: {inline: 1}},
+		function(err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/field\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
+// Nombre d'étudiant pas moyen de locomotion
+app.use("/coll/locomotion", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			if (this["car-time"]) {
+				emit("car", 1);
+			}
+			if (this["bus-time"]) {
+				emit("bus", 1);
+			}
+			if (this["foot-time"]) {
+				emit("foot", 1);
+			}
+			if (this["moto-time"]) {
+				emit("moto", 1);
+			}
+			if (this["bike-time"]) {
+				emit("bike", 1);
+			}
+		},
+		function(key, values) {
+			return values.length;
+		},
+		{ out: { inline: 1 } },
+		function (err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/locomotion\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
+// Nombre d'étudiant en fonction de l'affluence du bus
+app.use("/coll/affluence", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			if (this["bus-affluence"]) {
+				emit(this["bus-affluence"], 1);
+			}
+		},
+		function(key, values) {
+			return values.length;
+		},
+		{ out: { inline: 1 } },
+		function (err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/affluence\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
+// Nombre d'étudiants qui font du covoiturage par rapport à ceux qui prennent la voiture
+app.use("/coll/covoiturage", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			if (this["car-pooling"]) {
+				emit("pooling", 1);
+			}
+			if (this["car-time"]) {
+				emit("car", 1);
+			}
+		},
+		function(key, values) {
+			return values.length;
+		},
+		{ out: { inline: 1 } },
+		function (err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/covoiturage\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
+// Temps moyen pour chaque moyen de locomotion
+app.use("/coll/times", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			if (this["car-time"]) {
+				emit("car", Number(this["car-time"]));
+			}
+			if (this["bus-time"]) {
+				emit("bus", Number(this["bus-time"]));
+			}
+			if (this["foot-time"]) {
+				emit("foot", Number(this["foot-time"]));
+			}
+			if (this["moto-time"]) {
+				emit("moto", Number(this["moto-time"]));
+			}
+			if (this["bike-time"]) {
+				emit("bike", Number(this["bike-time"]));
+			}
+		},
+		function(key, values) {
+			return Array.sum(values) / values.length;
+		},
+		{ out: { inline: 1 } },
+		function (err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/times\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
+// Moyens de locomotion trié selon du plus satisfaisant au moins satisfaisant avec le nombre d'étudiants
+app.use("/coll/satisf", function(req, res) {
+	db.collection(coll).mapReduce(
+		function() {
+			if (this["car-feeling"]) {
+				emit("car", Number(this["car-feeling"]));
+			}
+			if (this["bus-feeling"]) {
+				emit("bus", Number(this["bus-feeling"]));
+			} 
+			if (this["bike-feeling"]) {
+				emit("bike", Number(this["bike-feeling"]));
+			}
+			if (this["foot-feeling"]) {
+				emit("foot", Number(this["foot-feeling"]));
+			} 
+			if (this["moto-feeling"]) {
+				emit("moto", Number(this["moto-feeling"]));
+			}
+		},
+		function(key, values) {
+			const moy = Array.sum(values) / values.length;
+			return {"average": moy, "nb": values.length};
+		},
+		{ out: { inline: 1 } },
+		function (err, data) {
+			if (err) {
+				console.log("\033[31m>>> " + err + "\033[0m");
+			} else {
+				console.log("\033[32m/coll/satisf\033[0m");
+				res.status(200).send(data);
+			}
+		}
+	);
+});
