@@ -9,6 +9,7 @@ app.listen("11009", function() {
 });
 
 
+// Connexion à MongoDB
 const MongoClient = require("mongodb").MongoClient;
 var db = null;
 MongoClient.connect(
@@ -23,3 +24,27 @@ MongoClient.connect(
         }
     }
 );
+
+
+// Ajout de la route /distance/{ville}
+app.use("/distance/:city", function(req, res) {
+	const path = "/route.json?stops=Bourget-Du-Lac|" + encodeURI(req.params.city);
+	
+	var data = "";
+	require("https").request({
+		host: "fr.distance24.org",
+		path: path,
+		port: 443,
+		method: "GET"
+	}, function(result) {
+		result.setEncoding("utf-8");
+		result.on("data", (chunk) => {
+			data += chunk;
+		});
+		result.on("end", () => {
+			const d = JSON.parse(data);
+			console.log("\033[32m" + path + " --> " + d.distance + "\033[0m");
+			res.status(200).send(`${d.distance}`);
+		});
+	}).end();
+});
