@@ -2,12 +2,58 @@
 <html lang="fr">
     <head>
         <title>Info508</title>
+        <script src="https://kit.fontawesome.com/f1dba2d0b3.js" crossorigin="anonymous"></script>
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+
+        <link rel="stylesheet" href="css/main.css"/>
     </head>
 
     <body>
-        <h1>Salut !</h1>
-	<p>Distance entre Le Bourget du Lac et Chambery : <span id="test">...</span></p>
+        <h1>Données enquête</h1>
+        <div class="content">
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerCheckedI"></i> Nombre de personnes qui ont coché "Ceci n'est pas un test"</h3>
+                <div id="containerChecked" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerNameI"></i> Nombre de personnes par première lettre du prénom</h3>
+                <div id="containerName" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerFieldI"></i> Nombre de personnes par filière</h3>
+                <div id="containerField" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerLocomotionI"></i> Nombre de personnes selon leur moyen de locomotion</h3>
+                <div id="containerLocomotion" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerAffluenceI"></i> Nombre de personnes qui prennent le bus par niveau d’affluence</h3>
+                <div id="containerAffluence" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerCovoiturageI"></i> Proportion des personnes qui viennent en voiture et font du covoiturage</h3>
+                <p id="containerCovoiturage" class="--unvisible percentage"></p>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerTimesI"></i> Temps de déplacement moyen pour chaque moyen de locomotion utilisé</h3>
+                <div id="containerTimes" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerSatisfI"></i> Moyen de locomotion du plus satisfaisant au moins satisfaisant en donnant le nombre de personnes à chaque fois</h3>
+                <div id="containerSatisf" class="--unvisible"></div>
+            </div>
+            <div class="view">
+                <h3><i class="fas fa-chevron-right" id="containerDistI"></i> Distance qui sépare chaque personne du campus</h3>
+                <div id="containerDist" class="--unvisible"></div>
+            </div>
+            <div>
+                <p>Ces données sont à prendre avec des pincettes, car il n'y a que <strong id="nbPersonnes">...</strong> personnes qui ont répondu à ce questionnaire (l'université comprend 15.000 étudiants). Parmis eux, seul certains on répondu à toutes les question, et seulement certains ont répondu avec honnêteté. De plus ce questionnaire ne visait qu'une filière donc l'échantillon n'est pas représentatif de l'université.</p>
+            </div>
+        </div>
     </body>
+
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="js/charts.js"></script>
     <script src="js/main.js"></script>
 </html>

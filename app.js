@@ -53,6 +53,7 @@ app.use("/distance/:city", function(req, res) {
 
 // Ajout des services pour interroger la collection
 const coll = "locomotion";
+const errorMessage = "Erreur de chargement";
 // Renvoie tout les documents
 app.use("/coll/all", function(req, res) {
 	db.collection(coll).mapReduce(
@@ -66,6 +67,7 @@ app.use("/coll/all", function(req, res) {
 		function(err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/all\033[0m");
 				res.status(200).send(data);
@@ -90,6 +92,7 @@ app.use("/coll/checked", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/checked\033[0m");
 				res.status(200).send(data)
@@ -113,6 +116,7 @@ app.use("/coll/name", function(req, res) {
 		function(err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/name\033[0m");
 				res.status(200).send(data);
@@ -133,6 +137,7 @@ app.use("/coll/field", function(req, res) {
 		function(err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/field\033[0m");
 				res.status(200).send(data);
@@ -167,6 +172,7 @@ app.use("/coll/locomotion", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/locomotion\033[0m");
 				res.status(200).send(data);
@@ -189,6 +195,7 @@ app.use("/coll/affluence", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/affluence\033[0m");
 				res.status(200).send(data);
@@ -214,6 +221,7 @@ app.use("/coll/covoiturage", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/covoiturage\033[0m");
 				res.status(200).send(data);
@@ -248,6 +256,7 @@ app.use("/coll/times", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/times\033[0m");
 				res.status(200).send(data);
@@ -283,6 +292,7 @@ app.use("/coll/satisf", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/satisf\033[0m");
 				res.status(200).send(data);
@@ -305,6 +315,7 @@ app.use("/coll/distance", function(req, res) {
 		function (err, data) {
 			if (err) {
 				console.log("\033[31m>>> " + err + "\033[0m");
+				res.status(502).send(errorMessage);
 			} else {
 				console.log("\033[32m/coll/distance\033[0m");
 				res.status(200).send(data);
